@@ -31,9 +31,10 @@ CREATE_INDEX_SQL = [
 
 
 class TrackDatabase:
-    def __init__(self, db_path: Path) -> None:
+    def __init__(self, db_path: Path, *, check_same_thread: bool = True) -> None:
         self.db_path = db_path
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        self._check_same_thread = check_same_thread
         self._conn: sqlite3.Connection | None = None
         self._init_db()
 
@@ -46,7 +47,9 @@ class TrackDatabase:
 
     def _get_conn(self) -> sqlite3.Connection:
         if self._conn is None:
-            self._conn = sqlite3.connect(str(self.db_path))
+            self._conn = sqlite3.connect(
+                str(self.db_path), check_same_thread=self._check_same_thread
+            )
             self._conn.row_factory = sqlite3.Row
         return self._conn
 

@@ -12,6 +12,12 @@ dependencies = [
     "uvicorn>=0.34",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.15",
+    "httpx>=0.28",
+]
+
 [project.scripts]
 sonos-tracker = "sonos_tracker.cli:cli"
 
@@ -27,7 +33,7 @@ channels = ["conda-forge"]
 platforms = ["linux-64"]
 
 [tool.pixi.pypi-dependencies]
-sonos-tracker = { path = ".", editable = true }
+sonos-tracker = { path = ".", editable = true, extras = ["dev"] }
 
 [tool.pixi.tasks]
 track = { cmd = "python -m sonos_tracker track" }

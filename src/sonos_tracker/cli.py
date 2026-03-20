@@ -264,3 +264,24 @@ def configure(
         console.print(f"  Speakers: {', '.join(config.speaker_names)}")
     else:
         console.print("  Speakers: all")
+
+
+@cli.command()
+@click.option("--host", "-h", type=str, default="0.0.0.0", help="Bind address.")
+@click.option("--port", "-p", type=int, default=8000, help="Port to listen on.")
+@click.pass_context
+def serve(ctx: click.Context, host: str, port: int) -> None:
+    """Start the REST API server for external analytics access."""
+    import uvicorn
+
+    from sonos_tracker.api import app, init_db
+
+    config: Config = ctx.obj["config"]
+    init_db(config.db_path)
+
+    console.print(f"[bold]Starting API server at http://{host}:{port}[/bold]")
+    console.print(f"[dim]Database: {config.db_path}[/dim]")
+    console.print(f"[dim]Docs: http://{host}:{port}/docs[/dim]")
+    console.print()
+
+    uvicorn.run(app, host=host, port=port, log_level="info")
