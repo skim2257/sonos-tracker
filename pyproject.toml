@@ -7,7 +7,9 @@ requires-python = ">= 3.11"
 dependencies = [
     "soco>=0.30",
     "click>=8.0",
-    "rich>=13.0", "ruff>=0.15.7,<0.16",
+    "rich>=13.0",
+    "fastapi>=0.115",
+    "uvicorn>=0.34",
 ]
 
 [project.scripts]
@@ -16,6 +18,9 @@ sonos-tracker = "sonos_tracker.cli:cli"
 [build-system]
 build-backend = "hatchling.build"
 requires = ["hatchling"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sonos_tracker"]
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
@@ -29,10 +34,12 @@ track = { cmd = "python -m sonos_tracker track" }
 history = { cmd = "python -m sonos_tracker history" }
 speakers = { cmd = "python -m sonos_tracker speakers" }
 now-playing = { cmd = "python -m sonos_tracker now-playing" }
+serve = { cmd = "python -m sonos_tracker serve" }
 
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+src = ["src"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "W"]
